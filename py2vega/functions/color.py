@@ -15,7 +15,7 @@ def rgb(r, g, b, opacity):
     raise RuntimeError('rgb' + error_message)
 
 
-def hsl(h, s, l, opacity):
+def hsl(h, s, l_, opacity):
     """Construct a new HSL color.
 
     If h, s and l are specified, these represent the channel values of the returned color;
@@ -25,7 +25,7 @@ def hsl(h, s, l, opacity):
     raise RuntimeError('hsl' + error_message)
 
 
-def lab(l, a, b, opacity):
+def lab(l_, a, b, opacity):
     """Construct a new CIE LAB color.
 
     If l, a and b are specified, these represent the channel values of the returned color;
@@ -35,7 +35,7 @@ def lab(l, a, b, opacity):
     raise RuntimeError('lab' + error_message)
 
 
-def hcl(h, c, l, opacity):
+def hcl(h, c, l_, opacity):
     """Construct a new HCL (hue, chroma, luminance) color.
 
     If h, c and l are specified, these represent the channel values of the returned color;
