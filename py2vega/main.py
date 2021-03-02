@@ -1,7 +1,6 @@
 """Python to VegaExpression transpiler."""
 
 import ast
-import sys
 
 import inspect
 import types
@@ -264,14 +263,6 @@ class VegaExpressionVisitor(ast.NodeVisitor):
 
     def visit_Name(self, node):
         """Turn a Python name expression into a Vega-expression."""
-        if sys.version_info[0] == 2:
-            if node.id == 'False':
-                return 'false'
-            if node.id == 'True':
-                return 'true'
-            if node.id == 'None':
-                return 'null'
-
         # If it's in the scope, return it's evaluated expression
         if node.id in self.scope:
             return self.scope[node.id]
@@ -304,12 +295,6 @@ class VegaExpressionVisitor(ast.NodeVisitor):
         """Turn a Python Subscript node into a Vega-expression."""
         value = self.visit(node.value)
 
-        if isinstance(node.slice, ast.Index):
-            return '{value}[{index}]'.format(
-                value=value,
-                index=self.visit(node.slice.value)
-            )
-
         if isinstance(node.slice, ast.Slice):
             if node.slice.step is not None:
                 raise Py2VegaSyntaxError('Unsupported step for {} node'.format(node.slice.__class__.__name__))
@@ -320,7 +305,14 @@ class VegaExpressionVisitor(ast.NodeVisitor):
 
             return 'slice({args})'.format(args=', '.join(args))
 
-        raise Py2VegaSyntaxError('Unsupported {} node'.format(node.slice.__class__.__name__))
+        return '{value}[{index}]'.format(
+            value=value,
+            index=self.visit(node.slice)
+        )
+
+    def visit_Index(self, node):
+        """Turn a Python subscript index into a Vega-expression."""
+        return self.visit(node.value)
 
     def visit_Attribute(self, node):
         """Turn a Python attribute expression into a Vega-expression."""
