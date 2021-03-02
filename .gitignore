@@ -5,3 +5,4 @@ py2vega/functions/__pycache__/*
 .pytest_cache/*
 build/*
 dist/*
+.coverage
