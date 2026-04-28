@@ -174,6 +174,9 @@ def test_attribute():
 
     assert py2vega('3 if value.member1 > value.member2 else 4', whitelist=[Variable('value', ['member1', 'member2'])]) == "((value.member1 > value.member2) ? 3 : 4)"
 
+    # Variable without explicit members# Variable without explicit members
+    assert py2vega("'red' if datum.code > 80 else 'blue'", whitelist=[Variable("datum")], ) == "((datum.code > 80) ? 'red' : 'blue')" 
+
     # Nested member access
     whitelisted_vars = [Variable('nested_var', [Variable('var', ['test']), 'x'])]
 
