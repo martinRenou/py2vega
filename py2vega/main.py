@@ -12,8 +12,13 @@ from .functions import vega_functions
 class Variable():
     """Helper class for defining a variable in whitelisting."""
 
-    def __init__(self, name, members):
-        """Construct a Variable, given its name and available members."""
+    def __init__(self, name, members=None):
+        """Construct a Variable, given its name and available members.
+
+        If members is None, all direct members are allowed. This is useful for
+        dynamic objects such as Vega's `datum`, where available field names are
+        data-dependent and not known ahead of time."""
+
         self.name = name
         self.members = members
 
@@ -76,6 +81,9 @@ def validate(nodes, origin_node):
 
 def valid_attribute_impl(node, var):
     """Check the attribute access validity. Returns True if the member access is valid, False otherwise."""
+    if var.members is None:
+        return True
+
     if node.value.id == var.name and node.attr in var.members:
         return True
 

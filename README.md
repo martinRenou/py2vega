@@ -86,6 +86,11 @@ from py2vega import py2vega, Variable
 
 py2vega('3 if value > 0 else 4', whitelist=['value'])  # Returns "value > 0 ? 3 : 4"
 py2vega('3 if my_variable > 0 else 4', whitelist=['value'])  # Raises a SyntaxError, `my_variable` is not whitelisted
+
+# Allow any member access on `value`
+py2vega('3 if value.member1 > value.member2 else 4', whitelist=[Variable('value')])  # Returns "value.member1 > value.member2 ? 3 : 4"
+
+# Restrict member access explicitly
 py2vega('3 if value.member1 > value.member2 else 4', whitelist=[Variable('value', ['member1', 'member2'])])  # Returns "value.member1 > value.member2 ? 3 : 4"
 py2vega('3 if value.member3 > 0 else 4', whitelist=[Variable('value', ['member1', 'member2'])])  # Raises a SyntaxError, `value.member3` is not whitelisted`
 ```
